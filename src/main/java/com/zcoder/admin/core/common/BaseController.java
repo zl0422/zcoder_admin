@@ -1,11 +1,7 @@
 package com.zcoder.admin.core.common;
 
-import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.ConstraintViolationException;
-import javax.validation.Validator;
-
+import com.google.common.base.Strings;
+import com.zcoder.admin.core.beanvalidator.BeanValidators;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,8 +10,11 @@ import org.springframework.data.domain.Sort;
 import org.springframework.ui.Model;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.google.common.base.Strings;
-import com.zcoder.admin.core.beanvalidator.BeanValidators;
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.ConstraintViolationException;
+import javax.validation.Validator;
+import java.util.List;
+
 
 /**
  * base controller all controllers should be sub-class Created by lin on
@@ -136,12 +135,38 @@ public class BaseController {
 	protected void beanValidator(Object object, Class<?>... groups) {
 		BeanValidators.validateWithException(validator, object, groups);
 	}
-	
-	
+
+
+	/**
+	 * 输出成功消息
+	 * @param model
+	 * @param message
+     */
+	protected void AddSuccessMessage(Model model,String message){
+		addMessage(model,MESSAGE_SUCCESS,message);
+	}
+	/**
+	 * 输出错误消息
+	 * @param model
+	 * @param message
+	 */
+	protected void AddErrorMessage(Model model,String message){
+		addMessage(model,MESSAGE_ERROR,message);
+	}
+
+	/**
+	 * 输出普通消息
+	 * @param model
+	 * @param message
+	 */
+	protected void AddMessage(Model model,String message){
+		addMessage(model,MESSAGE_INFO,message);
+	}
+
 
 	/**
 	 * 添加Model消息
-	 * @param message
+	 * @param messages
 	 */
 	protected void addMessage(Model model,String type, String... messages) {
 		StringBuilder sb = new StringBuilder();
@@ -155,7 +180,7 @@ public class BaseController {
 	
 	/**
 	 * 添加Flash消息
-	 * @param message
+	 * @param messages
 	 */
 	protected void addMessage(RedirectAttributes redirectAttributes,String type,String... messages) {
 		StringBuilder sb = new StringBuilder();

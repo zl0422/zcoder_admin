@@ -8,12 +8,10 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * Created by lin on 2016-05-24.
+ * Created by lin on 2016-06-14.
  */
 @Component
 @Transactional
 @Slf4j
 public class SysDictService extends CrudService<SysDictDao,SysDict> {
-
 }
-

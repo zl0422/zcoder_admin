@@ -45,7 +45,7 @@ public class ResponseMsg<T> {
                 '}';
     }
 
-    class ResponseMsgStatus{
+   public class ResponseMsgStatus{
         public final static String OK = "ok";
         public final static String ERROR = "error";
     }

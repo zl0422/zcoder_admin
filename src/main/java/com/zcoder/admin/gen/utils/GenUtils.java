@@ -74,6 +74,7 @@ public class GenUtils {
     public static <T> T fileToObject(String fileName, Class<?> clazz) {
         try {
             String pathName = "/templates/gen/" + fileName;
+            log.debug("template path :"+ pathName);
             Resource resource = new ClassPathResource(pathName);
             InputStream is = resource.getInputStream();
             BufferedReader br = new BufferedReader(new InputStreamReader(is, "UTF-8"));
@@ -124,25 +125,29 @@ public class GenUtils {
      * @param scheme 与GenScheme枚举对应
      * @return
      */
-    public static List<GenTemplate> getTemplateList(String scheme) {
+    public static List<GenTemplate> getTemplateList(String scheme,Gen gen) {
         List<GenTemplate> templates = Lists.newArrayList();
-        log.info("scheme:" + scheme);
+        log.debug("scheme:" + scheme);
+        GenScheme genScheme = new GenScheme(gen);
         if (Strings.isNullOrEmpty(scheme)) {
-            for (GenScheme genScheme : GenScheme.values()) {
-                log.info("template:" + genScheme.getValue());
-                GenTemplate template = fileToObject(genScheme.getValue(), GenTemplate.class);
-                templates.add(template);
-            }
-        } else {
-            for (GenScheme genScheme : GenScheme.values()) {
-                if (genScheme.getLabel().equalsIgnoreCase(scheme)) {
-                    log.info("template:" + genScheme.getValue());
-                    GenTemplate template = fileToObject(genScheme.getValue(), GenTemplate.class);
+
+            for (Map.Entry<String,String> entry : genScheme.getScheme().entrySet()){
+                String [] paths = entry.getValue().split(",");
+                for (String path : paths) {
+                    GenTemplate template = fileToObject(path, GenTemplate.class);
                     templates.add(template);
-                    break;
                 }
             }
-        }
+
+        } else {
+                if (genScheme.getScheme().containsKey(scheme)) {
+                    String [] paths = genScheme.getScheme().get(scheme).split(",");
+                    for (String path : paths) {
+                        GenTemplate template = fileToObject(path, GenTemplate.class);
+                        templates.add(template);
+                    }
+                }
+            }
         return templates;
     }
 
@@ -168,7 +173,24 @@ public class GenUtils {
                 model.get("urlPrefix"));
         model.put("permissionPrefix", model.get("moduleName") + (MyStrings.isNotBlank(gen.getSubModuleName())
                 ? ":" + MyStrings.lowerCase(gen.getSubModuleName()) : "") + ":" + model.get("className"));
-        model.put("table", gen.getTableName());
+        model.put("tableName", gen.getTableName());
+        model.put("columns", columns);
+        //list页面查询条件
+        List<Column> queryColumns = Lists.newArrayList();
+        //list页面查询列表
+        List<Column> ListColumns = Lists.newArrayList();
+        for ( Column column : columns){
+                if (column.isQuery()){
+                    queryColumns.add(column);
+                }
+                if (column.isList()){
+                    ListColumns.add(column);
+                }
+        }
+        model.put("queryColumns", queryColumns);
+        model.put("listColumns", ListColumns);
+        model.put("listColumnsSize", ListColumns.size());//列长
+        model.put("gen",gen);
         return model;
     }
 
@@ -231,6 +253,7 @@ public class GenUtils {
                     }
                 }
                 projectPath = file.toString();
+                log.debug("project path :" + projectPath);
             }
         } catch (IOException e) {
             log.info("get project path error", e);

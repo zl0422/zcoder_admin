@@ -23,12 +23,12 @@
                 <div class="clearfix"></div>
             </div>
             <div class="x_content">
-                <form class="form-horizontal form-label-left" id="frm" action="${ctx}/genCode/save" method="post">
+                <form:form modelAttribute="gen" class="form-horizontal form-label-left" id="frm"  action="${ctx}/genCode/save" method="post">
 
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">表名</label>
                         <div class="col-md-9 col-sm-9 col-xs-12">
-                            <select class="select2_multiple form-control" id="tableName" multiple="multiple">
+                            <select class="select2_multiple form-control" required="required" name="tableName" multiple="multiple">
                                 <c:forEach items="${tables}" var="table">
                                     <option value="${table}">${table}</option>
                                 </c:forEach>
@@ -39,24 +39,44 @@
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">类名</label>
                         <div class="col-md-9 col-sm-9 col-xs-12">
-                            <input type="text" class="form-control" id="className" placeholder="className">
+                            <input type="text" class="form-control" required="required" name="className" placeholder="类名">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">功能名</label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                            <input type="text" class="form-control"  name="funcName" placeholder="功能名">
                         </div>
                     </div>
 
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">模块名</label>
                         <div class="col-md-9 col-sm-9 col-xs-12">
-                            <input type="text" class="form-control" id="packageName" placeholder="packageName">
+                            <input type="text" class="form-control" required="required" name="moduleName" placeholder="模块名">
                         </div>
                     </div>
 
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">子模块名</label>
                         <div class="col-md-9 col-sm-9 col-xs-12">
-                            <input type="text" class="form-control" id="subPackageName" placeholder="subPackageName">
+                            <input type="text" class="form-control" name="subModuleName" placeholder="子模块名">
                         </div>
                     </div>
 
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">生成方案</label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                            <select class="form-control"  name="scheme">
+                                    <option value="">增删改查</option>
+                                    <option value="jsp">只生成页面</option>
+                                    <option value="web">只生成Controller</option>
+                                    <option value="service">只生成Service</option>
+                                    <option value="dao">只生成ao</option>
+                                    <option value="domain">只生成Domain</option>
+                            </select>
+                        </div>
+                    </div>
 
                     <table id="dataTable" class="table table-striped table-bordered"
                            cellspacing="0" width="100%" style="margin-left: 10px;margin-right: 10px;">
@@ -84,7 +104,7 @@
                             <button type="button" class="btn btn-primary">取消</button>
                         </div>
                     </div>
-                </form>
+                </form:form>
             </div>
         </div>
     </div>

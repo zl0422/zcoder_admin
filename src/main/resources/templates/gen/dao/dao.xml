@@ -4,19 +4,18 @@
     <filePath>src/main/java/${packageName}/${moduleName}/dao/${subModuleName}</filePath>
     <fileName>${ClassName}Dao.java</fileName>
     <content><![CDATA[
+
 package ${packageName}.${moduleName}.dao<#if subModuleName != "">.${subModuleName}</#if>;
 
-import com.cinyi.admin.common.persistence.CrudDao;
-import com.cinyi.admin.common.persistence.annotation.MyBatisDao;
-import ${packageName}.${moduleName}.entity<#if subModuleName != "">.${subModuleName}</#if>.${ClassName};
+import org.springframework.data.jpa.repository.JpaRepository;
+import ${packageName}.${moduleName}.domain<#if subModuleName != "">.${subModuleName}</#if>.${ClassName};
 
 /**
- * ${functionName}DAO接口
- * @author ${functionAuthor}
- * @version ${functionVersion}
+ * ${funcName}DAO接口
+ * @author ${author}
+ * @version ${version}
  */
-@MyBatisDao
-public interface ${ClassName}Dao extends CrudDao<${ClassName}> {
+public interface ${ClassName}Dao JpaRepository<${ClassName}, Long> {
 
 }]]>
     </content>

@@ -30,23 +30,23 @@
               </div>
               <div>
                 <button type="submit" class="btn btn-primary">登录</button>
-                <a class="reset_pass" href="#">Lost your password?</a>
+                <a class="reset_pass" href="#">忘记密码?</a>
               </div>
 
               <div class="clearfix"></div>
 
               <div class="separator">
-                <p class="change_link">New to site?
+               <%-- <p class="change_link">New to site?
                   <a href="#signup" class="to_register"> Create Account </a>
-                </p>
+                </p>--%>
 
                 <div class="clearfix"></div>
                 <br />
 
-                <div>
+               <%-- <div>
                   <h1><i class="fa fa-paw"></i> Gentelella Alela!</h1>
                   <p>©2016 All Rights Reserved. Gentelella Alela! is a Bootstrap 3 template. Privacy and Terms</p>
-                </div>
+                </div>--%>
               </div>
             </form>
           </section>

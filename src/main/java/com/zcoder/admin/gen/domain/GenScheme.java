@@ -1,53 +1,32 @@
 package com.zcoder.admin.gen.domain;
 
-import org.springframework.beans.factory.annotation.Value;
+import com.google.common.collect.Maps;
+
+import java.util.Map;
+
 
 /**
  * 生成方案，意在
  * 支持所有模板生成，也可进行某个模板的生成
  * Created by lin on 2016-06-13.
  */
-public enum  GenScheme {
+public class   GenScheme {
 
-    JSP("jsp",GenSchemeType.jsp),WEB("web",GenSchemeType.web),SERVICE("service",GenSchemeType.service),
-    DAO("dao",GenSchemeType.dao),DOMAIN("domain",GenSchemeType.domain);
+    private Gen gen;
 
-    GenScheme(String label,String value){
-        this.label = label;
-        this.value = value;
+    public GenScheme(Gen gen){
+        this.gen = gen;
     }
 
-    private String label;
-    private String value;
-
-    public String getLabel() {
-        return label;
+    public Map<String,String> getScheme(){
+        Map<String,String> schemes = Maps.newHashMap();
+        schemes.put("jsp",gen.getJsp());
+        schemes.put("web",gen.getWeb());
+        schemes.put("service",gen.getService());
+        schemes.put("dao",gen.getDao());
+        schemes.put("domain",gen.getDomain());
+        return schemes;
     }
 
-    public void setLabel(String label) {
-        this.label = label;
-    }
 
-    public String getValue() {
-        return value;
-    }
-
-    public void setValue(String value) {
-        this.value = value;
-    }
-
-    private static class GenSchemeType{
-
-        @Value("${jsp}")
-        private static  String jsp;
-        @Value("${web}")
-        private static String web;
-        @Value("${service}")
-        private static String service;
-        @Value("${dao}")
-        private static String dao;
-        @Value("${domain}")
-        private static String domain;
-
-    }
 }

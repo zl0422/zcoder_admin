@@ -30,6 +30,7 @@ public class GenCodeService {
     private EntityManager em;
 
     public List<Column> getColumnsByTableName(String tableName) {
+        Preconditions.checkArgument(tableName != null, "tableName must be not null.");
         String sql = "SHOW FULL FIELDS FROM " + tableName;
         Query query = em.createNativeQuery(sql);
         List<Column> result = Lists.newArrayList();
@@ -55,30 +56,20 @@ public class GenCodeService {
      *
      * @param request
      */
-    public void genCode(HttpServletRequest request) throws Exception {
-
-        String tableName = request.getParameter("tableName");
-        String className = request.getParameter("className");
-        String funcName = request.getParameter("funcName");
-        String moduleName = request.getParameter("moduleName");
-        String subModuleName = request.getParameter("subModuleName");
+    public void genCode(HttpServletRequest request, Gen gen) throws Exception {
 
         log.info("=======================gen code============================");
-        log.info("tableName :" + tableName + "className :" + className
-                + "moduleName :" + moduleName + "subModuleName :" + subModuleName);
 
-        Preconditions.checkArgument(tableName != null, "tableName must be not null.");
-        Preconditions.checkArgument(className != null, "className must be not null.");
-        Preconditions.checkArgument(moduleName != null, "moduleName must be not null.");
+        log.debug("Gen :" + gen.toString());
 
-        List<Column> columns = getColumns(request, tableName);
-
-        String scheme = request.getParameter("scheme");
-        List<GenTemplate> templates = GenUtils.getTemplateList(scheme);
-        Map<String, Object> model = buildModel(tableName, className, funcName, moduleName, subModuleName, columns);
-        if (templates != null && !templates.isEmpty()) {
-            for (GenTemplate template : templates) {
-                GenUtils.generate(template, model, true);
+        if (gen != null) {
+            List<Column> columns = getColumns(request, gen.getTableName());
+            List<GenTemplate> templates = GenUtils.getTemplateList(gen.getScheme(),gen);
+            Map<String, Object> model = GenUtils.getDataModel(gen, columns);
+            if (templates != null && !templates.isEmpty()) {
+                for (GenTemplate template : templates) {
+                    GenUtils.generate(template, model, false);
+                }
             }
         }
 
@@ -86,6 +77,7 @@ public class GenCodeService {
 
     /**
      * 封装请求参数
+     *
      * @param request
      * @param tableName
      * @return
@@ -110,26 +102,5 @@ public class GenCodeService {
         }
         return columns;
     }
-
-    /**
-     * 构建模型
-     * @param tableName
-     * @param className
-     * @param funcName
-     * @param moduleName
-     * @param subModuleName
-     * @param columns
-     * @return
-     */
-    private Map<String, Object> buildModel(String tableName, String className, String funcName, String moduleName, String subModuleName, List<Column> columns) {
-        Gen gen = new Gen();
-        gen.setTableName(tableName);
-        gen.setClassName(className);
-        gen.setFuncName(funcName);
-        gen.setModuleName(moduleName);
-        gen.setSubModuleName(subModuleName);
-        return GenUtils.getDataModel(gen,columns);
-    }
-
 
 }

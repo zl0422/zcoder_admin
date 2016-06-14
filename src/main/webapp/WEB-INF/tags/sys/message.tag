@@ -5,6 +5,6 @@
 <c:if test="${not empty content}">
 	 <div class="alert alert-${type}">
           <button type="button" class="close" data-dismiss="alert">&times;</button>
-          <strong>${type}!</strong>${content}
+          <strong>${content}</strong>
      </div>
 </c:if>

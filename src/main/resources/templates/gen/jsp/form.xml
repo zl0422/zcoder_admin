@@ -5,87 +5,100 @@
     <fileName>${className}Form.jsp</fileName>
     <content><![CDATA[
 <%@ page contentType="text/html;charset=UTF-8" %>
-<%@ include file="/WEB-INF/views/include/taglib.jsp"%>
+<%@include file="/WEB-INF/views/common/taglib.jsp"%>
 <html>
 <head>
-	<title>${functionNameSimple}管理</title>
-	<meta name="decorator" content="default"/>
-	<script type="text/javascript">
-		$(document).ready(function() {
-			//$("#name").focus();
-			$("#inputForm").validate({
-				submitHandler: function(form){
-					loading('正在提交，请稍等...');
-					form.submit();
-				},
-				errorContainer: "#messageBox",
-				errorPlacement: function(error, element) {
-					$("#messageBox").text("输入有误，请先更正。");
-					if (element.is(":checkbox")||element.is(":radio")||element.parent().is(".input-append")){
-						error.appendTo(element.parent().parent());
-					} else {
-						error.insertAfter(element);
-					}
-				}
-			});
-		});
-	</script>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>数据字典</title>
+<%@include file="/WEB-INF/views/common/include.jsp"%>
 </head>
-<body>
-	<ul class="nav nav-tabs">
-		<li><a href="${r"${ctx}"}/${urlPrefix}/">${functionNameSimple}列表</a></li>
-		<li class="active"><a href="${r"${ctx}"}/${urlPrefix}/form?id=${"${"+className+".id}"}">${functionNameSimple}<shiro:hasPermission name="${permissionPrefix}:edit">${r"${not empty "+className+".id?'修改':'添加'}"}</shiro:hasPermission><shiro:lacksPermission name="${permissionPrefix}:edit">查看</shiro:lacksPermission></a></li>
-	</ul><br/>
-	<form:form id="inputForm" modelAttribute="${className}" action="${r"${ctx}"}/${urlPrefix}/save" method="post" class="form-horizontal">
-		<form:hidden path="id"/>
-		<sys:message content="${r"${message}"}"/>
-		<#list table.columnList as c>
-			<#if c.isEdit?? && c.isEdit == "1" && (c.isNotBaseField || c.simpleJavaField == 'remarks')>
-		<div class="control-group">
-			<label class="control-label">${c.comments}：</label>
-			<div class="controls">
-			<#if c.showType == "input">
-				<form:input path="${c.javaFieldId}" htmlEscape="false"<#if c.dataLength != "0"> maxlength="${c.dataLength}"</#if> class="input-xlarge <#if c.isNull != "1">required</#if><#if c.javaType == "Long" || c.javaType == "Integer"> digits</#if><#if c.javaType == "Double"> number</#if>"/>
-			<#elseif c.showType == "textarea">
-				<form:textarea path="${c.javaFieldId}" htmlEscape="false" rows="4"<#if c.dataLength != "0"> maxlength="${c.dataLength}"</#if> class="input-xxlarge <#if c.isNull != "1">required</#if>"/>
-			<#elseif c.showType == "select">
-				<form:select path="${c.javaFieldId}" class="input-xlarge <#if c.isNull != "1">required</#if>">
-					<form:option value="" label=""/>
-					<form:options items="${"$"}{fns:getDictList('${c.dictType}')}" itemLabel="label" itemValue="value" htmlEscape="false"/>
-				</form:select>
-			<#elseif c.showType == "checkbox">
-				<form:checkboxes path="${c.javaFieldId}" items="${"$"}{fns:getDictList('${c.dictType}')}" itemLabel="label" itemValue="value" htmlEscape="false" class="<#if c.isNull != "1">required</#if>"/>
-			<#elseif c.showType == "radiobox">
-				<form:radiobuttons path="${c.javaFieldId}" items="${"$"}{fns:getDictList('${c.dictType}')}" itemLabel="label" itemValue="value" htmlEscape="false" class="<#if c.isNull != "1">required</#if>"/>
-			<#elseif c.showType == "dateselect">
-				<input name="${c.javaFieldId}" type="text" readonly="readonly" maxlength="20" class="input-medium Wdate <#if c.isNull != "1">required</#if>"
-					value="<fmt:formatDate value="${"$"}{${className}.${c.javaFieldId}}" pattern="yyyy-MM-dd HH:mm:ss"/>"
-					onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',isShowClear:false});"/>
-			<#elseif c.showType == "userselect">
-				<sys:treeselect id="${c.simpleJavaField}" name="${c.javaFieldId}" value="${"$"}{${className}.${c.javaFieldId}}" labelName="${c.javaFieldName}" labelValue="${"$"}{${className}.${c.javaFieldName}}"
-					title="用户" url="/sys/office/treeData?type=3" cssClass="<#if c.isNull != "1">required</#if>" allowClear="true" notAllowSelectParent="true"/>
-			<#elseif c.showType == "officeselect">
-				<sys:treeselect id="${c.simpleJavaField}" name="${c.javaFieldId}" value="${"$"}{${className}.${c.javaFieldId}}" labelName="${c.javaFieldName}" labelValue="${"$"}{${className}.${c.javaFieldName}}"
-					title="部门" url="/sys/office/treeData?type=2" cssClass="<#if c.isNull != "1">required</#if>" allowClear="true" notAllowSelectParent="true"/>
-			<#elseif c.showType == "areaselect">
-				<sys:treeselect id="${c.simpleJavaField}" name="${c.javaFieldId}" value="${"$"}{${className}.${c.javaFieldId}}" labelName="${c.javaFieldName}" labelValue="${"$"}{${className}.${c.javaFieldName}}"
-					title="区域" url="/sys/area/treeData" cssClass="<#if c.isNull != "1">required</#if>" allowClear="true" notAllowSelectParent="true"/>
-			<#elseif c.showType == "fileselect">
-				<form:hidden id="${c.simpleJavaField}" path="${c.javaFieldId}" htmlEscape="false"<#if c.dataLength != "0"> maxlength="${c.dataLength}"</#if> class="input-xlarge"/>
-				<sys:ckfinder input="${c.simpleJavaField}" type="files" uploadPath="/${moduleName}<#if subModuleName != "">/${subModuleName}</#if>/${className}" selectMultiple="true"/>
-			</#if>
-			<#if c.isNull != "1">
-				<span class="help-inline"><font color="red">*</font> </span>
-			</#if>
+<body class="main-bg">
+	<sys:message type="${r"${type}"}" content="${r"${content}"}"></sys:message>
+
+	<div class="row">
+		<div class="col-md-12 col-sm-12 col-xs-12">
+			<div class="" role="tabpanel" data-example-id="togglable-tabs">
+				<ul id="myTab" class="nav nav-tabs bar_tabs" role="tablist">
+					<li><a href="${r"${ctx}"}/${urlPrefix}/find" role="tab">列表</a>
+					</li>
+					<li  class="active"><c:choose>
+							<c:when test="${action=='edit'}">
+								<a href="${r"${ctx}"}/${urlPrefix}/form?action='edit'&id=${"${"+className+".id}"}"
+									role="tab">编辑</a>
+							</c:when>
+							<c:otherwise>
+								<a href="${r"${ctx}"}/${urlPrefix}/form?id=${"${"+className+".id}"}" role="tab">新增</a>
+							</c:otherwise>
+						</c:choose></li>
+				</ul>
 			</div>
-		</div>
-			</#if>
-		</#list>
-		<div class="form-actions">
-			<shiro:hasPermission name="${permissionPrefix}:edit"><input id="btnSubmit" class="btn btn-primary" type="submit" value="保 存"/>&nbsp;</shiro:hasPermission>
-			<input id="btnCancel" class="btn" type="button" value="返 回" onclick="history.go(-1)"/>
-		</div>
-	</form:form>
+			<div id="myTabContent" class="tab-content">
+				<div role="tabpanel" class="tab-pane fade active in" id="listPanel"
+					aria-labelledby="home-tab">
+					<br>
+					<div class="row">
+						<div class="col-md-12 col-sm-12 col-xs-12">
+							<div class="x_panel">
+								<div class="x_title">
+									<h2>
+										<i class="glyphicon glyphicon-th-large"></i>${funcName}信息
+									</h2>
+									<ul class="nav navbar-right panel_toolbox">
+										<li><a class="collapse-link"><i
+												class="fa fa-chevron-up"></i></a></li>
+										<li><a class="close-link"><i class="fa fa-close"></i></a>
+										</li>
+									</ul>
+									<div class="clearfix"></div>
+								</div>
+								<div class="x_content">
+									<form:form id="inputForm" modelAttribute="${className}" role="form"
+										action="${r"${ctx}"}/${urlPrefix}/save" method="post"
+										class="form-horizontal form-label-left">
+										<form:hidden path="id" />
+
+										<#list columns as column>
+											<#if column.field??>
+													<div class="item form-group">
+													<label for="${column.field}"
+														class="control-label col-md-3 col-sm-3 col-xs-12">${column.comment}<span
+														class="required">*</span>
+													</label>
+													<div class="col-md-6 col-sm-6 col-xs-12">
+														<#if column.formType?? && column.formType =='text'>
+															<form:input  path="${column.field}"
+																required="required"
+																placeholder="请输入${column.comment}"
+																data-validate-pattern="numeric"
+																data-validate-minmax="0,100"
+																class="form-control col-md-7 col-xs-12" />
+														</#if>
+														<#if column.formType?? && column.formType =='textarea'>
+															<form:textarea  path="${column.formType}" rows="3" data-validate-length-range="1,200"
+															class="form-control col-md-7 col-xs-12" />
+														</#if>
+													</div>
+												</div>
+											</#if>
+										</#list>
+										<div class="ln_solid"></div>
+											<div class="form-group">
+												<div class="col-md-6 col-md-offset-3">
+													<shiro:hasPermission name="${permissionPrefix}:edit">
+														<button id="send" type="submit" class="btn btn-success">保存/button>
+													</shiro:hasPermission>
+													<button type="button" class="btn btn-primary">取消</button>
+												</div>
+										</div>
+									</form:form>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+<%@include file="/WEB-INF/views/common/include-js.jsp"%>
+<%@include file="/WEB-INF/views/common/include-custom-validator.jsp"%>
 </body>
 </html>]]>
     </content>

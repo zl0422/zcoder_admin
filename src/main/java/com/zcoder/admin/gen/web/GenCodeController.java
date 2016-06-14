@@ -4,6 +4,7 @@ import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import com.zcoder.admin.core.common.BaseController;
 import com.zcoder.admin.gen.domain.Column;
+import com.zcoder.admin.gen.domain.Gen;
 import com.zcoder.admin.gen.service.GenCodeService;
 import com.zcoder.admin.gen.service.MysqlTableService;
 import com.zcoder.admin.gen.utils.GenUtils;
@@ -12,7 +13,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
@@ -36,9 +39,16 @@ public class GenCodeController extends BaseController {
 
     @Autowired
     private GenCodeService codeService;
+    @Autowired
+    private  Gen gen;
+
+    @ModelAttribute
+    public Gen get(@RequestParam(required = false) String id) {
+        return gen;
+    }
 
     @RequestMapping("/find")
-    public String init(Model model) {
+    public String init(Model model,Gen gen) {
         List<String> tables = tableService.findAllTables();
         model.addAttribute("tables", tables);
         return "gen/genCodeForm";
@@ -49,9 +59,7 @@ public class GenCodeController extends BaseController {
     @ResponseBody
     Map<Object, Object> findColumn(HttpServletRequest request, String tableName) {
 
-        System.out.println("table:" + tableName);
         List<Column> columns = Lists.newArrayList();
-
         if (!Strings.isNullOrEmpty(tableName)) {
             columns = codeService.getColumnsByTableName(tableName);
         }
@@ -73,14 +81,18 @@ public class GenCodeController extends BaseController {
 
 
     @RequestMapping("/save")
-    public String save(HttpServletRequest request) {
-
+    public String save(HttpServletRequest request, Model model, Gen gen) {
         try {
-            codeService.genCode(request);
+            log.debug("Gen ：" + gen.toString());
+            if (!beanValidator(model, gen)) {
+                return init(model,gen);
+            }
+            codeService.genCode(request,gen);
+            addMessage(model,MESSAGE_SUCCESS,"操作成功");
         } catch (Exception e) {
-            e.printStackTrace();
+            addMessage(model,MESSAGE_ERROR,"操作失败");
         }
-
-        return null;
+        return "gen/genCodeForm";
     }
+
 }
