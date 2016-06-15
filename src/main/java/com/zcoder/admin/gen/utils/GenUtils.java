@@ -11,7 +11,6 @@ import com.zcoder.admin.gen.domain.Gen;
 import com.zcoder.admin.gen.domain.GenScheme;
 import com.zcoder.admin.gen.domain.GenTemplate;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.DefaultResourceLoader;
 import org.springframework.core.io.Resource;
@@ -37,20 +36,20 @@ public class GenUtils {
 
         String result = "";
 
-        if (StringUtils.startsWithIgnoreCase(jdbcType, "CHAR")
-                || StringUtils.startsWithIgnoreCase(jdbcType, "VARCHAR")
-                || StringUtils.startsWithIgnoreCase(jdbcType, "NARCHAR")) {
+        if (MyStrings.startsWithIgnoreCase(jdbcType, "CHAR")
+                || MyStrings.startsWithIgnoreCase(jdbcType, "VARCHAR")
+                || MyStrings.startsWithIgnoreCase(jdbcType, "NARCHAR")) {
             result = "String";
-        } else if (StringUtils.startsWithIgnoreCase(jdbcType, "DATETIME")
-                || StringUtils.startsWithIgnoreCase(jdbcType, "DATE")
-                || StringUtils.startsWithIgnoreCase(jdbcType, "TIMESTAMP")) {
+        } else if (MyStrings.startsWithIgnoreCase(jdbcType, "DATETIME")
+                || MyStrings.startsWithIgnoreCase(jdbcType, "DATE")
+                || MyStrings.startsWithIgnoreCase(jdbcType, "TIMESTAMP")) {
             result = "Date";
-        } else if (StringUtils.startsWithIgnoreCase(jdbcType, "BIGINT")
-                || StringUtils.startsWithIgnoreCase(jdbcType, "NUMBER")
-                || StringUtils.startsWithIgnoreCase(jdbcType, "INT")
-                || StringUtils.startsWithIgnoreCase(jdbcType, "SMALLINT")) {
+        } else if (MyStrings.startsWithIgnoreCase(jdbcType, "BIGINT")
+                || MyStrings.startsWithIgnoreCase(jdbcType, "NUMBER")
+                || MyStrings.startsWithIgnoreCase(jdbcType, "INT")
+                || MyStrings.startsWithIgnoreCase(jdbcType, "SMALLINT")) {
             // 如果是浮点型
-            String[] ss = StringUtils.split(StringUtils.substringBetween(jdbcType, "(", ")"), ",");
+            String[] ss = MyStrings.split(MyStrings.substringBetween(jdbcType, "(", ")"), ",");
             if (ss != null && ss.length == 2 && Integer.parseInt(ss[1]) > 0) {
                 result = "Double";
             } else if (ss != null && ss.length == 1 && Integer.parseInt(ss[0]) <= 10) {
@@ -62,6 +61,24 @@ public class GenUtils {
         return result;
 
     }
+
+
+    /**
+     * 获取字段长度
+     * @param jdbcType
+     * @return
+     */
+    public static String getLength(String jdbcType){
+        String length = "0";
+        if (MyStrings.startsWithIgnoreCase(jdbcType, "BIGINT")
+                || MyStrings.startsWithIgnoreCase(jdbcType, "NUMBER")
+                || MyStrings.startsWithIgnoreCase(jdbcType, "INT")
+                || MyStrings.startsWithIgnoreCase(jdbcType, "SMALLINT")) {
+            length = MyStrings.substringBetween(jdbcType, "(", ")");
+        }
+        return length;
+    }
+
 
     /**
      * XML文件转换为对象
@@ -108,7 +125,7 @@ public class GenUtils {
         try {
             File file = new DefaultResourceLoader().getResource("").getFile();
             if (file != null) {
-                return file.getAbsolutePath() + File.separator + StringUtils.replaceEach(GenUtils.class.getName(),
+                return file.getAbsolutePath() + File.separator + MyStrings.replaceEach(GenUtils.class.getName(),
                         new String[]{"util." + GenUtils.class.getSimpleName(), "."}, new String[]{"template", File.separator});
             }
         } catch (Exception e) {
@@ -169,7 +186,7 @@ public class GenUtils {
         model.put("funcName", MyStrings.capitalize(gen.getFuncName()));
         model.put("urlPrefix", model.get("moduleName") + (MyStrings.isNotBlank(gen.getSubModuleName())
                 ? "/" + MyStrings.lowerCase(gen.getSubModuleName()) : "") + "/" + model.get("className"));
-        model.put("viewPrefix", //StringUtils.substringAfterLast(model.get("packageName"),".")+"/"+
+        model.put("viewPrefix", MyStrings.substringAfterLast((String)model.get("packageName"),".")+"/"+
                 model.get("urlPrefix"));
         model.put("permissionPrefix", model.get("moduleName") + (MyStrings.isNotBlank(gen.getSubModuleName())
                 ? ":" + MyStrings.lowerCase(gen.getSubModuleName()) : "") + ":" + model.get("className"));
@@ -208,7 +225,7 @@ public class GenUtils {
                 new String[]{"//", "/", "."}, new String[]{File.separator, File.separator, File.separator})
                 + FreeMarkerUtils.renderString(tpl.getFileName(), model);
         // 获取生成文件内容
-        String content = FreeMarkerUtils.renderString(StringUtils.trimToEmpty(tpl.getContent()), model);
+        String content = FreeMarkerUtils.renderString(MyStrings.trimToEmpty(tpl.getContent()), model);
 
         if (log.isDebugEnabled()){
             log.debug("target fileName === " + fileName);

@@ -47,7 +47,6 @@
 							class="fa fa-chevron-down"></span></a>
 						<ul class="nav child_menu">
 							<li><a href="${ctx}/genCode/find" target="mainFrame">代码生成</a></li>
-							<li><a href="form_advanced.html" target="mainFrame">生成方案配置</a></li>
 						</ul></li>
 				</ul>
 			</div>

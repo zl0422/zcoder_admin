@@ -5,6 +5,8 @@
 <link href="/gentelella/vendors/datatables.net-fixedheader-bs/css/fixedHeader.bootstrap.min.css" rel="stylesheet">
 <link href="/gentelella/vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css" rel="stylesheet">
 <link href="/gentelella/vendors/datatables.net-scroller-bs/css/scroller.bootstrap.min.css" rel="stylesheet">
+<link href="/gentelella/vendors/datatables.net/css/jquery.dataTables.min.css" rel="stylesheet">
+
 <!-- Datatables -->
 <script src="/gentelella/vendors/datatables.net/js/jquery.dataTables.min.js"></script>
 <script src="/gentelella/vendors/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>

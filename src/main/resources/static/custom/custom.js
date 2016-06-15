@@ -72,22 +72,12 @@
 	My.dataTable = function(options) {
 
 		var opts = $.extend({}, My.dataTable.defaults, options);
-		
-		/*console.log('ajax:'+ typeof opts.ajax);
-		console.log('columns:'+ typeof opts.columns);
-		console.log('columnDefs:'+ typeof opts.columnDefs);*/
-		
-		/*if(opts.ajax){
-			throw new Error('Object ajax required');
-		}
-		if(opts.columns){
-			throw new Error('Object columns required');
-		}*/
 
 		return $('#' + opts.domId).DataTable({
 			"serverSide" : opts.serverSide,
 			"searching" : opts.searching,
 			"scrollX" : opts.scrollX,
+			"scrollY" : opts.scrollY,
 			"info" : opts.info,
 			"paging" : opts.paging,
 			"pagingType" : opts.pagingType,
@@ -116,7 +106,8 @@
 		"domId" : "dataTable",// table dom id
 		"serverSide" : true,// 由服务器处理分页
 		"searching" : false,// 隐藏搜索框
-		"scrollX" : true,// 水平滚动条
+		"scrollX" : false,// 水平滚动条
+		"scrollY" : false,// 垂直滚动条
 		"info" : false,// 分页描述信息
 		"paging" : true,// 分页
 		"pagingType" : "full_numbers",

@@ -38,7 +38,7 @@ import ${packageName}.${moduleName}.service<#if subModuleName != "">.${subModule
  */
 @Slf4j
 @Controller
-@RequestMapping(value = "${/${urlPrefix}")
+@RequestMapping(value = "${urlPrefix}")
 public class ${ClassName}Controller extends BaseController {
 
 	@Autowired
@@ -57,7 +57,7 @@ public class ${ClassName}Controller extends BaseController {
 	@RequestMapping("/find")
 	@RequiresPermissions("${permissionPrefix}:view")
 	public String init() {
-		return "${lastPackageName}/${viewPrefix}List";
+		return "/${viewPrefix}List";
 	}
 
 	@RequestMapping("/findAll")
@@ -75,10 +75,10 @@ public class ${ClassName}Controller extends BaseController {
 
 	@RequestMapping(value = "form")
 	@RequiresPermissions("${permissionPrefix}:view")
-	public String form(${ClassName} ${className}, Model model) {
+	public String form(${ClassName} ${className},HttpServletRequest request, Model model) {
 		model.addAttribute("${className}", ${className});
 		model.addAttribute("action", request.getParameter("action"));
-		return "${lastPackageName}/${viewPrefix}Form";
+		return "/${viewPrefix}Form";
 	}
 
 
@@ -87,10 +87,10 @@ public class ${ClassName}Controller extends BaseController {
 	public String save(${ClassName} ${className}, Model model,HttpServletRequest request, RedirectAttributes redirectAttributes) {
 
 		if (!beanValidator(model, ${className})) {
-			return form(${className}, model;
+			return form(${className}, model,request);
 		}
 		${className}Service.save(${className});
-		addSuccessMessage(redirectAttributes ,"保存'" + ${funcName} + "'成功");
+		addSuccessMessage(redirectAttributes ,"保存'${funcName}'成功");
 		return "redirect:/${viewPrefix}";
 	}
 

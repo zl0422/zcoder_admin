@@ -6,11 +6,22 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>代码生成</title>
     <%@include file="/WEB-INF/views/common/include.jsp" %>
+    <style type="text/css">
+        td.details-control {
+            background: rgba(0, 0, 0, 0) url("/images/details_open.png") no-repeat scroll center center;
+            cursor: pointer;
+        }
+        tr.shown td.details-control {
+            background: rgba(0, 0, 0, 0) url("/images/details_close.png") no-repeat scroll center center;
+        }
+        div.dataTables_wrapper {
+            margin: 0 auto;
+        }
+    </style>
 </head>
 <body style="background: #F7F7F7">
 <sys:message type="${type}" content="${content}"></sys:message>
 <div class="row">
-    <div class="col-md-12 col-sm-12 col-xs-12">
         <div class="x_panel">
             <div class="x_title">
                 <h2>
@@ -25,61 +36,63 @@
             <div class="x_content">
                 <form:form modelAttribute="gen" class="form-horizontal form-label-left" id="frm"  action="${ctx}/genCode/save" method="post">
 
-                    <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">表名</label>
-                        <div class="col-md-9 col-sm-9 col-xs-12">
-                            <select class="select2_multiple form-control" required="required" name="tableName" multiple="multiple">
-                                <c:forEach items="${tables}" var="table">
-                                    <option value="${table}">${table}</option>
-                                </c:forEach>
-                            </select>
+                    <div class="row">
+                        <div class="col-md-6 col-sm-6 col-xs-12 form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">表名</label>
+                            <div class="col-md-6 col-sm-6 col-xs-3">
+                                <select class="select2_multiple form-control" required="required" name="tableName" multiple="multiple">
+                                    <c:forEach items="${tables}" var="table">
+                                        <option value="${table}">${table}</option>
+                                    </c:forEach>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 col-sm-6 col-xs-12 form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">类名</label>
+                            <div class="col-md-6 col-sm-6 col-xs-3">
+                                <input type="text" class="form-control" required="required" name="className" placeholder="类名">
+                            </div>
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="col-md-6 col-sm-6 col-xs-12 form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">功能名</label>
+                            <div class="col-md-6 col-sm-6 col-xs-3">
+                                <input type="text" class="form-control"  name="funcName" placeholder="功能名">
+                            </div>
+                        </div>
 
-                    <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">类名</label>
-                        <div class="col-md-9 col-sm-9 col-xs-12">
-                            <input type="text" class="form-control" required="required" name="className" placeholder="类名">
+                        <div class="col-md-6 col-sm-6 col-xs-12 form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">模块名</label>
+                            <div class="col-md-6 col-sm-6 col-xs-3">
+                                <input type="text" class="form-control" required="required" name="moduleName" placeholder="模块名">
+                            </div>
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="col-md-6 col-sm-6 col-xs-12 form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">子模块名</label>
+                            <div class="col-md-6 col-sm-6 col-xs-3">
+                                <input type="text" class="form-control" name="subModuleName" placeholder="子模块名">
+                            </div>
+                        </div>
 
-                    <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">功能名</label>
-                        <div class="col-md-9 col-sm-9 col-xs-12">
-                            <input type="text" class="form-control"  name="funcName" placeholder="功能名">
+                        <div class="col-md-6 col-sm-6 col-xs-12 form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">生成方案</label>
+                            <div class="col-md-6 col-sm-6 col-xs-3">
+                                <select class="form-control"  name="scheme">
+                                        <option value="">增删改查</option>
+                                        <option value="jsp">只生成页面</option>
+                                        <option value="web">只生成Controller</option>
+                                        <option value="service">只生成Service</option>
+                                        <option value="dao">只生成ao</option>
+                                        <option value="domain">只生成Domain</option>
+                                </select>
+                            </div>
                         </div>
                     </div>
-
-                    <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">模块名</label>
-                        <div class="col-md-9 col-sm-9 col-xs-12">
-                            <input type="text" class="form-control" required="required" name="moduleName" placeholder="模块名">
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">子模块名</label>
-                        <div class="col-md-9 col-sm-9 col-xs-12">
-                            <input type="text" class="form-control" name="subModuleName" placeholder="子模块名">
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">生成方案</label>
-                        <div class="col-md-9 col-sm-9 col-xs-12">
-                            <select class="form-control"  name="scheme">
-                                    <option value="">增删改查</option>
-                                    <option value="jsp">只生成页面</option>
-                                    <option value="web">只生成Controller</option>
-                                    <option value="service">只生成Service</option>
-                                    <option value="dao">只生成ao</option>
-                                    <option value="domain">只生成Domain</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <table id="dataTable" class="table table-striped table-bordered"
-                           cellspacing="0" width="100%" style="margin-left: 10px;margin-right: 10px;">
+                    <table id="dataTable" class="table table-striped table-bordered" cellspacing="0" width="100%">
                         <thead>
                         <tr>
                             <th>列名</th>
@@ -88,10 +101,7 @@
                             <th>主键</th>
                             <th>可空</th>
                             <th>注释</th>
-                            <th>查询条件</th>
-                            <th>查询方式</th>
-                            <th>列表</th>
-                            <th>表单类型</th>
+                            <th>设置</th>
                         </tr>
                         </thead>
                         <tbody></tbody>
@@ -99,20 +109,64 @@
                     </table>
                     <div class="ln_solid"></div>
                     <div class="form-group">
-                        <div class="col-md-6 col-md-offset-3">
+                        <div style="float: right;">
                             <button id="send" type="submit" class="btn btn-success">保存</button>
-                            <button type="button" class="btn btn-primary">取消</button>
                         </div>
                     </div>
                 </form:form>
             </div>
-        </div>
     </div>
 </div>
 
 <%@include file="/WEB-INF/views/common/include-js.jsp" %>
 <%@include file="/WEB-INF/views/common/include-datatables.jsp" %>
+<script src="/custom/genDictData.js"></script>
 <script>
+
+    function format ( d ) {
+        // `d` is the original data object for the row
+        var _htmlForQueryMethod = '<select id="queryMethod" name="queryMethod_' + d.field + '">';
+        $.each(queryMethodArr, function(name, value) {
+            _htmlForQueryMethod += '<option value="'+value+'">'+name+'</option>';
+        });
+        _htmlForQueryMethod += '</select>';
+
+        var _htmlForformType = '<select id="formType" name="formType_' + d.field + '">';
+        $.each(formTypeArr, function(name, value) {
+            _htmlForformType += '<option value="'+value+'">'+name+'</option>';
+        });
+        _htmlForformType += '</select>';
+
+
+        var _htmlForDataType = '<select id="dataType" name="dataType_' + d.field + '">';
+        $.each(validatorDataTypeArr, function(name, value) {
+            _htmlForDataType += '<option value="'+value+'">'+name+'</option>';
+        });
+        _htmlForDataType += '</select>';
+
+        return '<table class="table table-striped" cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">'+
+                '<tr>'+
+                '<td nowrap>查询字段:</td>'+
+                '<td width="300px"><input type="checkbox" value="true"  name="isQuery_' + d.field + '" class="editor-active"></td>'+
+                '<td nowrap>查询方式:</td>'+
+                '<td width="300px">'+_htmlForQueryMethod+'</td>'+
+                '<td nowrap>列表字段:</td>'+
+                '<td width="300px"><input type="checkbox"  value="true" checked="true" name="isList_' + d.field + '" class="editor-active"></td>'+
+                '<td nowrap>表单类型:</td>'+
+                '<td width="300px">'+_htmlForformType+'</td>'+
+                '</tr>'+
+                '<tr>'+
+                '<td nowrap>必填:</td>'+
+                '<td width="300px"><input type="checkbox"  value="required" checked="true"  name="isRequired_' + d.field + '" class="editor-active"></td>'+
+                '<td nowrap>数据类型:</td>'+
+                '<td width="300px">'+_htmlForDataType+'</td>'+
+                '<td nowrap>数据范围:</td>'+
+                '<td width="300px"><input type="text"  name="lengthRange_' + d.field + '" class="editor-active"></td>'+
+                '<td width="100px"></td>'+
+                '<td width="300px"></td>'+
+                '</tr>'+
+                '</table>';
+    }
 
     $(function () {
         $(".select2_multiple").select2({
@@ -131,97 +185,54 @@
                     d.tableName = $.trim($('.select2_multiple').val());
                 }
             },
-            "ordering": false,
-            "scrollX": true,
+            "orderable": false,
+            "scrollX": false,
+            "scrollY": 200,
             "info": false,
             "paging": false,
             "columns": [{
-                "data": "field"
+                "data": "field",
+                "orderable":      false
             }, {
-                "data": "jdbcType"
+                "data": "jdbcType",
+                "orderable":      false
             }, {
-                "data": "javaType"
+                "data": "javaType",
+                "orderable":      false
             }, {
-                "data": "isKey"
+                "data": "isKey",
+                "orderable":      false
             }, {
-                "data": "isNull"
+                "data": "isNull",
+                "orderable":      false
             }, {
-                "data": "comment"
-            }, {
-                "data": "isQuery",
-                "render": function (data, type, row) {
-
-                    if (type === 'display') {
-                        var flag = false;
-                        for(var val in exclude){
-                            if($.trim(row.field) == exclude[val]){
-                                flag = true;
-                                break;
-                            }
-                        }
-                        if(flag){
-                            return '<input type="checkbox"  name="isQuery_' + row.field + '" class="editor-active">';
-                        }else {
-                            return '<input type="checkbox" checked="true" name="isQuery_' + row.field + '" class="editor-active">';
-                        }
-                    }
-                    return data;
-                },
-                "className": "dt-body-center"
-            }, {
-                "data": "queryMethod",
-                "render": function (data, type, row) {
-                    if (type === 'display') {
-                        var _html = '<select id="queryMethod" name="queryMethod_' + row.field + '">';
-                        _html += '<option value="=">等于</option>';
-                        _html += '<option value="like">模糊</option>';
-                        _html += '<option value="between">between</option>';
-                        _html += '</select>';
-                        return _html;
-                    }
-                    return data;
-                },
-                "className": "dt-body-center"
-            }, {
-                "data": "isList",
-                "render": function (data, type, row) {
-                    if (type === 'display') {
-                        var flag = false;
-                        for(var val in exclude){
-                            if($.trim(row.field) == exclude[val]){
-                                flag = true;
-                                break;
-                            }
-                        }
-                        if(flag){
-                            return '<input type="checkbox"  name="isList_' + row.field + '" class="editor-active">';
-                        }else {
-                            return '<input type="checkbox" checked="true" name="isList_' + row.field + '" class="editor-active">';
-                        }
-                    }
-                    return data;
-                },
-                "className": "dt-body-center"
-            }, {
-                "data": "formType",
-                "render": function (data, type, row) {
-                    if (type === 'display') {
-                        var _html = '<select id="formType" name="formType_' + row.field + '">';
-                        _html += '<option value="text">文本框</option>';
-                        _html += '<option value="date">日期</option>';
-                        _html += '<option value="select">下拉列表</option>';
-                        _html += '<option value="radio">单选</option>';
-                        _html += '<option value="checkBox">复选</option>';
-                        _html += '<option value="textarea">文本区</option>';
-                        _html += '</select>';
-                        return _html;
-                    }
-                    return data;
-                },
-                "className": "dt-body-center"
+                "data": "comment",
+                "orderable":      false
+            },{
+                "className":      'details-control',
+                "orderable":      false,
+                "data":           null,
+                "defaultContent": ''
             }]
 
         });
+
+
+        $('#dataTable tbody').on('click', 'td.details-control', function () {
+            var tr = $(this).closest('tr');
+            var row = table.row( tr );
+
+            if ( row.child.isShown() ) {
+                // This row is already open - close it
+                row.child.hide();
+                tr.removeClass('shown');
+            }
+            else {
+                // Open this row
+                row.child( format(row.data()) ).show();
+                tr.addClass('shown');
+            }
+        } );
 
         //隐藏分页下拉列表
         $('#dataTable_length').css('display', 'none');
@@ -229,6 +240,7 @@
         $('.select2_multiple').bind('change', function () {
             table.draw();
         });
+
     });
 
     $('form').submit(function (e) {

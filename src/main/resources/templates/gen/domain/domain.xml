@@ -21,20 +21,19 @@ import java.util.Date;
 public class ${ClassName} implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-
-
-	<#list columns as column>
-
-		<#if column.field =='id'>
-				@Id
-				@GeneratedValue(strategy = GenerationType.IDENTITY)
-				private Long id;
-		<#else>
-				@Column
-				private ${column.javaType} ${column.field}; <#if column.comment??>// ${column.comment}</#if>
-		</#if>
-	</#list>
-
+<#list columns as column>
+  <#if column.field =='id'>
+     @Id
+     @GeneratedValue(strategy = GenerationType.IDENTITY)
+     private Long id;
+  <#else>
+    /**
+     * ${column.comment}
+     */
+    @Column
+    private ${column.javaType} ${column.field};
+    </#if>
+</#list>
 
 }]]>
     </content>

@@ -34,7 +34,7 @@ response.setDateHeader("Expires", -10);
 			<div class="right_col" role="main">
 				<iframe id="mainFrame" name="mainFrame" src=""
 					style="overflow: visible;" scrolling="no" frameborder="no"
-					width="100%" height="100%"></iframe>
+					width="100%" height="800px"></iframe>
 			</div>
 			<!-- /#mainframe --> 
 			

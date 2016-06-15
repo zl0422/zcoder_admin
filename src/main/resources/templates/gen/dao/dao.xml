@@ -12,10 +12,10 @@ import ${packageName}.${moduleName}.domain<#if subModuleName != "">.${subModuleN
 
 /**
  * ${funcName}DAO接口
- * @author ${author}
- * @version ${version}
+ * @author ${gen.author}
+ * @version ${gen.version}
  */
-public interface ${ClassName}Dao JpaRepository<${ClassName}, Long> {
+public interface ${ClassName}Dao extends JpaRepository<${ClassName}, Long> {
 
 }]]>
     </content>
