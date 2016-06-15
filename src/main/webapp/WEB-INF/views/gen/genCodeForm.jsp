@@ -86,7 +86,7 @@
                                         <option value="jsp">只生成页面</option>
                                         <option value="web">只生成Controller</option>
                                         <option value="service">只生成Service</option>
-                                        <option value="dao">只生成ao</option>
+                                        <option value="dao">只生成Dao</option>
                                         <option value="domain">只生成Domain</option>
                                 </select>
                             </div>
