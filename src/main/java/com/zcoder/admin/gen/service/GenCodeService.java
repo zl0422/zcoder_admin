@@ -100,12 +100,14 @@ public class GenCodeService {
                 column.setList(Boolean.TRUE);
             }
             if (param.keySet().contains("queryMethod_" + column.getField())) {
-                log.debug("queryMethod_"+column.getField() +": "+ param.get("queryMethod_" + column.getField()));
                 column.setQueryMethod((String)param.get("queryMethod_" + column.getField()));
             }
             if (param.keySet().contains("formType_" + column.getField())) {
-                log.debug("formType_"+column.getField() +": "+ param.get("formType_" + column.getField()));
                 column.setFormType((String)param.get("formType_" + column.getField()));
+            }
+
+            if (param.keySet().contains("dictData_" + column.getField())) {
+                column.setDictType((String)param.get("dictData_" + column.getField()));
             }
 
             //验证部分

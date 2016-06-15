@@ -162,8 +162,8 @@
                 '<td width="300px">'+_htmlForDataType+'</td>'+
                 '<td nowrap>数据范围:</td>'+
                 '<td width="300px"><input type="text"  name="lengthRange_' + d.field + '" class="editor-active"></td>'+
-                '<td width="100px"></td>'+
-                '<td width="300px"></td>'+
+                '<td nowrap>数据字典类型（checkbox,radio,select有效）</td>'+
+                '<td width="300px"><input type="text"  name="dictData_' + d.field + '" class="editor-active"></td>'+
                 '</tr>'+
                 '</table>';
     }

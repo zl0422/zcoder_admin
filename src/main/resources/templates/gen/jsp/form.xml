@@ -59,13 +59,14 @@
 										<#list columns as column>
 											<#if column.field??>
 													<div class="item form-group">
-													<label for="${column.field}"
+													<label for="${column.javaField}"
 														class="control-label col-md-3 col-sm-3 col-xs-12">${column.comment}<span
 														class="required">*</span>
 													</label>
 													<div class="col-md-6 col-sm-6 col-xs-12">
+
 														<#if column.formType?? && column.formType =='text'>
-															<form:input  path="${column.field}" maxLength="${column.length}"
+															<form:input  path="${column.javaField}" maxLength="${column.length}"
 															    <#if column.validator?? && column.validator.required =='required'>
 																    required="required"
 																</#if>
@@ -78,8 +79,46 @@
 																placeholder="请输入${column.comment}"
 																class="form-control col-md-7 col-xs-12" />
 														</#if>
-														<#if column.formType?? && column.formType =='textarea'>
-															<form:textarea  path="${column.formType}" rows="3" data-validate-length-range="1,200"
+
+														<#if column.field?? && column.formType =='select'>
+                                                            <form:select path="${column.javaField}" class="input-xlarge"
+                                                                <#if column.validator?? && column.validator.required =='required'>
+																    required="required"
+																</#if>>
+                                                                <form:option value="" label=""/>
+                                                                <form:options items="${"$"}{fns:getDictList('${column.dictType}')}" itemLabel="label" itemValue="value" htmlEscape="false"/>
+                                                            </form:select>
+														</#if>
+
+                                                        <#if column.field?? && column.formType =='checkbox'>
+                                                            <form:checkboxes path="${column.javaField}" items="${"$"}{fns:getDictList('${column.dictType}')}"
+                                                            itemLabel="label" itemValue="value" htmlEscape="false"
+                                                            <#if column.validator?? && column.validator.required =='required'>
+																    required="required"
+															</#if>
+                                                            />
+                                                        </#if>
+
+                                                         <#if column.field?? && column.formType =='radio'>
+                                                            <form:radiobuttons path="${column.javaField}" items="${"$"}{fns:getDictList('${column.dictType}')}"
+                                                            itemLabel="label" itemValue="value" htmlEscape="false"
+                                                             <#if column.validator?? && column.validator.required =='required'>
+																    required="required"
+															</#if>
+                                                            />
+                                                         </#if>
+
+														<#if column.field?? && column.formType =='textarea'>
+															<form:textarea  path="${column.javaField}" rows="3" data-validate-length-range="1,200"
+															 <#if column.validator?? && column.validator.required =='required'>
+																    required="required"
+																</#if>
+																 <#if column.validator?? && column.validator.validatorData??>
+																    type="${column.validator.validatorData}"
+																</#if>
+                                                                <#if column.validator?? && column.validator.dataValidateLengthRange??>
+																    data-validate-length-range="${column.validator.dataValidateLengthRange}"
+																</#if>
 															class="form-control col-md-7 col-xs-12" />
 														</#if>
 													</div>

@@ -53,12 +53,21 @@
 
 								<#list queryColumns as column>
                                     <div class="form-group">
-                                        <label class="control-label col-md-3 col-sm-3" for="${column.field}">${column.comment}
+                                        <label class="control-label col-md-3 col-sm-3" for="${column.javaField}">${column.comment}
                                         </label>
                                         <div class="col-md-3 col-sm-3">
                                             <#if column.field?? && column.formType =='text'>
-                                                <input type="text" name="${column.field}" id="${column.field}" class="form-control">
+                                                <input type="text" name="${column.javaField}" id="${column.javaField}" class="form-control">
                                             </#if>
+                                            <#if column.field?? && column.formType =='select'>
+                                                            <form:select path="${column.javaField}" class="input-xlarge"
+                                                                <#if column.validator?? && column.validator.required =='required'>
+																    required="required"
+																</#if>>
+                                                                <form:option value="" label=""/>
+                                                                <form:options items="${"$"}{fns:getDictList('${column.dictType}')}" itemLabel="label" itemValue="value" htmlEscape="false"/>
+                                                            </form:select>
+														</#if>
                                         </div>
                                     </div>
 								</#list>
@@ -91,7 +100,7 @@
                     "url" : "${r"${ctx}"}/${urlPrefix}/findAll",
                     "data" : function(d) {
                             <#list queryColumns as column>
-                                d.${column.field} = $('#${column.field}').val();
+                                d.${column.javaField} = $('#${column.javaField}').val();
                             </#list>
                     }
                 },
@@ -113,7 +122,7 @@
                 "columns" : [ {"data" : "id"},
                             <#list listColumns as column>
                                          {
-                                            "data" : "${column.field}"
+                                            "data" : "${column.javaField}"
                                           }	,
                             </#list>
                             {"data" : "id"}
