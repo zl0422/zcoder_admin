@@ -23,6 +23,7 @@ import com.google.common.base.Strings;
 import com.zcoder.admin.core.common.BaseController;
 import com.zcoder.admin.core.common.Constants;
 import com.zcoder.admin.core.message.ResponseMsg;
+import com.zcoder.admin.core.common.Constants;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -90,7 +91,7 @@ public class ${ClassName}Controller extends BaseController {
 			return form(${className},request,model);
 		}
 		${className}Service.save(${className});
-		addSuccessMessage(redirectAttributes ,"保存'${funcName}'成功");
+		addSuccessMessage(redirectAttributes ,Constants.SUCCESS_MSG);
 		return "redirect:/${urlPrefix}";
 	}
 
@@ -99,9 +100,9 @@ public class ${ClassName}Controller extends BaseController {
 	public @ResponseBody ResponseMsg<String> delete(${ClassName} ${className}) {
 		try {
 			${className}Service.delete(${className});
-			return new ResponseMsg<String>("删除成功");
+			return new ResponseMsg<String>(Constants.SUCCESS_MSG);
 		} catch (Exception e) {
-			return new ResponseMsg<String>("删除失败");
+			return new ResponseMsg<String>(Constants.ERROR_MSG);
 		}
 	}
 
