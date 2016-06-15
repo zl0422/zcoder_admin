@@ -2,6 +2,7 @@ package com.zcoder.admin.gen.service;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
+import com.zcoder.admin.core.utils.CamelCaseUtils;
 import com.zcoder.admin.core.utils.guava.MyMaps;
 import com.zcoder.admin.gen.domain.Column;
 import com.zcoder.admin.gen.domain.Gen;
@@ -91,6 +92,7 @@ public class GenCodeService {
         for (Column column : columns) {
             column.setJavaType(GenUtils.toJavaType(column.getJdbcType()));
             column.setLength(GenUtils.getLength(column.getJdbcType()));
+            column.setJavaField(CamelCaseUtils.toCamelCase(column.getField()));
             if (param.keySet().contains("isQuery_" + column.getField())) {
                 column.setQuery(Boolean.TRUE);
             }

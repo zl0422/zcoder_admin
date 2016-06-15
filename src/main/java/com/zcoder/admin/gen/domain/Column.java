@@ -94,4 +94,9 @@ public class Column implements Serializable {
 	 */
 	private Validator validator;
 
+	/**
+	 * 数据字典类型
+	 */
+	private String dictType;
+
 }
