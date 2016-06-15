@@ -57,7 +57,7 @@ public class ${ClassName}Controller extends BaseController {
 	@RequestMapping("/find")
 	@RequiresPermissions("${permissionPrefix}:view")
 	public String init() {
-		return "/${viewPrefix}List";
+		return "/${urlPrefix}List";
 	}
 
 	@RequestMapping("/findAll")
@@ -78,7 +78,7 @@ public class ${ClassName}Controller extends BaseController {
 	public String form(${ClassName} ${className},HttpServletRequest request, Model model) {
 		model.addAttribute("${className}", ${className});
 		model.addAttribute("action", request.getParameter("action"));
-		return "/${viewPrefix}Form";
+		return "/${urlPrefix}Form";
 	}
 
 
@@ -87,11 +87,11 @@ public class ${ClassName}Controller extends BaseController {
 	public String save(${ClassName} ${className}, Model model,HttpServletRequest request, RedirectAttributes redirectAttributes) {
 
 		if (!beanValidator(model, ${className})) {
-			return form(${className}, model,request);
+			return form(${className},request,model);
 		}
 		${className}Service.save(${className});
 		addSuccessMessage(redirectAttributes ,"保存'${funcName}'成功");
-		return "redirect:/${viewPrefix}";
+		return "redirect:/${urlPrefix}";
 	}
 
 	@RequestMapping(value = "delete")
